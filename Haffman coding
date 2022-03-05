@@ -1,0 +1,153 @@
+#include <queue>
+#include <functional>
+#include <iostream>
+#include <stdlib.h>
+#include <string>
+#include <vector>
+#include <bits/stdc++.h>
+#define s second
+#define f first
+
+
+
+using namespace std;
+
+bool    comp(pair<char, pair<int, string>> a, pair<char, pair<int, string>> b)
+{
+    return ((a.s.f) < (b.s.f));
+}
+
+
+
+
+int main ()
+{
+    int count;
+    count = 0;
+    string S, abc, answer;
+    cout << "Строка : ";
+    cin >> S;
+    abc  = "abcdefghijklmnopqrstuvwxyz";
+  
+    vector<pair<char, pair<int, string>>> F(S.length()); // хранит данные о букве, частоте и код
+    
+    
+    
+  // находит встречающиеся буквы, находит их колво(count)
+    for (int i  = 0; i < abc.length(); i ++)
+    {
+     
+        for (int j = 0; j < S.length(); j ++)
+        {
+            
+            if (S[j] == abc[i])
+               count += 1;
+        }
+        if (count != 0)
+            F.push_back(make_pair(abc[i], make_pair(count,"")));
+        count = 0;
+    }
+    
+    
+
+ //   сортирует по возрастанию частоты
+    sort(F.begin(), F.end(), comp);
+ //   удаляет нулевые элементы
+    while (F[0].s.f == 0)
+    {
+        F.erase(F.begin());    
+    }
+
+
+// вывод частот
+    for (int i = 0; i < F.size(); i ++ )
+    {
+        cout << F[i].f << "   " << F[i].s.f << endl;
+    }
+    
+    priority_queue<int, vector<int>, greater<int>> Q; 
+    
+    vector<pair<int, string>> P(2 * F.size() - 1);
+
+    for (int i = 0; i < F.size(); i ++ )
+    {
+        Q.push(F[i].s.f);
+    }
+    
+    //  построение дерева. 
+    
+    for (int i = 0; i < (2 * F.size() - 1); i ++)
+    {
+
+        
+        P[i].f = Q.top();
+        Q.pop();
+        
+        if ((i + 2) % 2 != 0)
+            Q.push(P[i].f + P[i - 1].f);
+    }
+    
+    
+    
+    reverse(P.begin(), P.end());
+    
+    for (int i = 0; i < P.size(); i++)
+    {
+        for (int j = i + 1; j < P.size(); j++)
+        {
+            if (  (P[i].f == P[j].f + P[j + 1].f) && ((P[j].s).length() == 0) && ((P[j + 1].s).length() == 0) )
+            {
+                P[j].s = P[i].s + "0";
+                P[j + 1].s = P[i].s + "1";
+                P.erase(P.begin() + i);
+            }
+            
+            
+        }
+    }
+    
+reverse(P.begin(), P.end());
+    
+
+    
+
+
+    for (int i = 0; i < F.size(); i ++)
+    {
+     
+        F[i].s.s = P[i].s;
+        
+    }
+    
+    
+ cout << endl;
+ 
+ if (F.size() == 1)
+ F[0].s.s = "0";
+ 
+ 
+    
+    
+    for (int i  = 0; i < S.length(); i ++)
+    {
+     
+        for (int j = 0; j < F.size(); j ++)
+        {
+            if (S[i] == F[j].f)
+                answer += F[j].s.s;
+            
+        }
+        
+    }
+    
+    cout <<F.size() <<" " <<answer.length() << endl;
+    
+    for (int i = 0; i < F.size() ; i ++ )
+    {
+        cout << F[i].f <<":" << F[i].s.s << endl;
+    }
+    
+    cout << answer;
+    
+ return 0;
+}
