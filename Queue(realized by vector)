@@ -1,0 +1,165 @@
+
+#include <iostream>
+#include <vector>
+#include <string>
+
+using namespace std;
+
+class Queue
+{
+    public:
+    
+    vector<int> T;
+    string Mode;
+    
+    void In(int a)
+    {
+        T.push_back(a);
+        Sort_after_In(T, Mode);
+    }
+    
+    void Pop()
+    {
+        int S;
+        S = T.size();
+    
+        cout << T[0] << endl;
+            
+        if (S == 1)
+        {
+            T.erase(T.begin());
+        }
+            
+        else if (S > 1)
+        {
+            T[0] = T[S - 1];
+            T.erase(T.begin() + S - 1);
+        }
+            
+    if (Mode == "Min")
+    {
+        Min_sort(T);
+    }
+            
+    if (Mode == "Max")
+    {
+        Max_sort(T);
+    }
+    }
+    
+    private:
+    
+    void Min_sort(vector<int>&T)
+    {   
+        int S = T.size();
+        int j = 0;
+        int buf = 0;
+        while (((2 * j + 1) < S) && ((T[j] > T[2 * j + 1]) || (T[j] > T[2 * j + 2])))
+        {
+            if (T[2 * j + 1] < T[2 * j + 2])
+                {
+                    buf = T[2 * j + 1];
+                    T[2 * j + 1] = T[j];
+                    T[j] = buf;
+                    buf = 0; 
+                    j = 2 * j + 1;
+                    continue;
+                }
+                    
+            if (T[2 * j + 1] >= T[2 * j + 2])
+                {
+                    buf = T[2 * j + 2];
+                    T[2 * j + 2] = T[j];
+                    T[j] = buf;
+                    buf = 0; 
+                    j = 2 * j + 2; 
+                    continue;
+                }
+        }
+    }
+    
+    void Max_sort(vector<int>&T)
+    {
+        int S = T.size();
+        int j = 0;
+        int buf = 0;
+    
+        while (((2 * j + 1) < S) && ((T[j] < T[2 * j + 1]) || (T[j] < T[2 * j + 2])))
+        {
+            if (T[2 * j + 1] > T[2 * j + 2])
+                {
+                    buf = T[2 * j + 1];
+                    T[2 * j + 1] = T[j];
+                    T[j] = buf;
+                    buf = 0; 
+                    j = 2 * j + 1;
+                    continue;
+                }
+                    
+            if (T[2 * j + 1] <= T[2 * j + 2])
+                {
+                    buf = T[2 * j + 2];
+                    T[2 * j + 2] = T[j];
+                    T[j] = buf;
+                    buf = 0; 
+                    j = 2 * j + 2; 
+                    continue;
+                }
+        }
+    }
+    
+    void Sort_after_In(vector<int>&T, string Mode)
+    {
+        int j, buf;
+        buf = 0;
+        j = T.size() - 1;
+         
+    while ((j > 0) && (((Mode == "Min")&&(T[j] < T[(int)((j - 1) / 2)]))||((Mode == "Max")&&(T[j] > T[(int)((j - 1) / 2)]))))
+        {
+            buf = T[(int)((j - 1) / 2)];
+            T[(int)((j - 1) / 2)] = T[j];
+            T[j] = buf;
+            buf = 0;
+            j = (int)((j - 1)/2);
+        }
+    }
+    
+};
+
+
+int main()
+{
+    
+    Queue q;
+    
+    int b;
+    string a;
+    
+    cout << "Min or Max --> ";
+    
+    cin >> q.Mode;
+
+    cout << " operations " << endl;
+    
+    while (a != "Stop")
+    {
+        cin >> a;
+        if (a == "In")
+        {
+            cin >> b;
+            q.In(b);   
+        }
+
+        if (a == "Pop")
+        {   
+            q.Pop(); 
+        }
+        
+        
+    }
+
+    return 0;
+}
+
+
+
