@@ -1,0 +1,138 @@
+#include <stdio.h>
+#include <iostream>
+
+
+using namespace std;
+
+template<typename T>
+class VectorInt {
+    private:
+        // elements of class
+        T *arr_;
+        size_t size_ = 1;
+        size_t v_memory = 1;
+        
+        
+        void addMemory()
+        {
+            v_memory *= 2;
+            
+            T *kostyl = arr_; // вспомогательный массив, чтобы не подключать всякие флгоритмы и вот это вот все
+            arr_ = new T[v_memory];
+            for (size_t i = 0; i < size_; i++) 
+                arr_[i] = kostyl[i];
+                
+            delete[] kostyl;
+        }
+        
+    public:
+        VectorInt(size_t size) : size_(size) {
+            // constructor(int)
+            v_memory = size_;
+            arr_ = new T[v_memory];
+      	    
+        }
+        
+        
+        
+        void push_back(T item) { /// почему тут было bool. Если это прост процедура, которая по идее ничего не должна возвращать? или должна?))
+        // ну типа добавления +1 к памяти и записывание в ласт ячейку item
+            // push_back(int)
+ 
+            if (size_ >= v_memory)
+                addMemory();
+                
+            arr_[size_++] = item;
+    
+        };
+        
+        void resize(int to_resize)
+        {
+            
+            int copy_; // штука, для того чтобы не писать кучу раз копировать/вставить в ифах
+            
+            if ((to_resize > size_) && (to_resize <= v_memory))
+            {
+                copy_ = size_;
+            }
+            
+            else if ((to_resize > size_) && (to_resize > v_memory))            
+            {
+                v_memory = to_resize;
+                copy_ = size_;
+            }
+            
+            else if (to_resize < size_)
+            {
+                copy_ = to_resize;
+            }
+           
+            T *kostyl = arr_; 
+            arr_ = new T[v_memory];
+            for (size_t i = 0; i < copy_; i++) 
+                arr_[i] = kostyl[i];
+                
+            delete[] kostyl;
+            
+            size_ = to_resize;
+            
+            
+            
+        }
+        
+        size_t size() const {
+            // size()
+            return size_;
+        }
+        
+        size_t memory() const {
+            // size()
+            return v_memory;
+        }
+        
+        T& operator[](size_t index) {
+            // []
+            
+            return arr_[index];
+            
+        }
+        
+        T at(size_t index) const {
+            // at()
+            return arr_[index];
+        }
+};
+
+int main() {
+    VectorInt <double> vec(3);
+    vec[0] = 0.1;
+    vec[1] = 0.2;
+    vec[2] = 0.3;
+    cout << "size = " << vec.size() << endl; // Вывод: size = 3
+    
+    vec.push_back(2.1);
+    vec.push_back(3.1);
+    cout << "size = " << vec.size() << endl; // Вывод: size = 5
+    vec[3] = 10.3;
+    
+    for (size_t i = 0; i < vec.size(); i++) {
+        cout << vec[i] << "|"; // Вывод: 4 | 5 | 7 | 10 | 0 |
+    }
+    cout << endl;
+    cout << "size = " << vec.size() << endl; // Вывод: size = 4
+    cout << "v_memory = " << vec.memory()<< endl; // Вывод: size = 4
+    cout << endl;
+    cout << endl;
+    vec.resize(5);
+    
+    
+    for (size_t i = 0; i < vec.size(); i++) {
+        cout << vec[i] << "|"; // Вывод: 4 | 5 | 7 | 10 |
+    }
+    cout << endl;
+    cout << "size = " << vec.size() << endl; // Вывод: size = 4
+    cout << "v_memory = " << vec.memory()<< endl; // Вывод: size = 4
+    cout << endl;
+    
+    return 0;
+}
