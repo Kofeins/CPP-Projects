@@ -1,0 +1,57 @@
+#include <algorithm>
+#include <cassert>
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+int get_pos(const vector<int> &numbers, int number) 
+{
+  
+    int l = 0;
+    int r = numbers.size() - 1 ;
+    int m;
+    
+    while (l <= r)
+    {
+        m = (l + r) / 2;
+        if (numbers[m] == number)
+            return m;
+        else if (numbers[m] > number)
+            r = m - 1;
+        else
+            l = m + 1;
+    }
+    
+    return -1;
+}
+
+int main(void) 
+{
+  size_t number_count;
+  size_t query_count;
+  
+  cout << "Size of vector = ";
+  cin >> number_count;
+  
+  vector<int> numbers(number_count);
+  
+  cout << "Vector`s elements" << endl;
+  
+  for (size_t i = 0; i < number_count; i++) 
+  {
+    cin >> numbers[i];
+  }
+
+  cout << "I want find (count) nubmers, count = ";
+  cin >> query_count;
+    
+  while (query_count-- > 0) 
+  {
+      int number;
+      cout << endl << "I want find : ";
+      cin >> number;
+      cout << "Number_position in vector = " << get_pos(numbers, number) << " ";
+  }
+  cout << endl;
+}
