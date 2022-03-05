@@ -1,0 +1,86 @@
+#include <iostream>
+#include <vector>
+
+
+using namespace std;
+
+int Partition(vector<int>&A, int l, int r)
+{
+    int i, j, m, x, buf;
+    x = A[l];
+    j = l;
+    
+    
+    for (int i = l + 1; i <= r; i++)
+    {
+        if (A[i] <= x)
+        {
+            j++;
+            buf = A[i];
+            A[i] = A[j];
+            A[j] = buf;
+            cout << "+ ";
+            
+        }
+    }
+    cout << "+ ";
+    buf = A[l];
+    A[l] = A[j];
+    A[j] = buf;
+    return j;
+    
+    
+    
+}
+    
+    
+    
+
+
+void QuickSort(vector<int>&A, int l, int r)
+{
+    if (l >=r)
+        return;
+    
+    int m = Partition(A, l, r); 
+    
+    QuickSort(A, l, m - 1);
+    QuickSort(A, m + 1, r);
+    
+}
+
+
+int main()
+{
+    int n = 0;
+    cout << "n = ";
+    cin >> n;
+    vector<int> A(n);
+    
+    for (int i = 0; i < n; i++)
+    {
+         A[i] = 1 + rand() % 100;   
+    }
+    
+    cout << "vector A" << endl;
+    for (int i = 0; i < n; i ++)
+    {
+        cout << A[i] << " ";
+    }
+    
+    cout << endl;
+    cout << endl;
+    
+    QuickSort(A, 0, n - 1);
+    
+    cout << endl;
+    cout << endl;
+    
+    cout << "vector A1" << endl;
+    for (int i = 0; i < n; i ++)
+    {
+        cout << A[i] << " ";
+    }
+    
+    return 0;
+}
